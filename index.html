@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dziennik temperatur</title>
+  <meta name="description" content="Prosty dziennik pomiarów temperatury: kuchnia, piec i zewnątrz.">
+  <meta name="theme-color" content="#c2410c" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151311" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Temperatury">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Dziennik temperatur</h1>
+      <p class="sub" id="count"></p>
+    </header>
+
+    <form id="form" class="card" autocomplete="off" novalidate>
+      <h2 id="form-title">Nowy wpis</h2>
+      <p class="hint form-hint">Wszystkie pola są wymagane.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="f-date">Data</label>
+          <input type="date" id="f-date" required>
+        </div>
+        <div class="field">
+          <label for="f-hour">Godzina (0–23)</label>
+          <input type="number" id="f-hour" min="0" max="23" step="1" inputmode="numeric" required>
+        </div>
+
+        <div class="field">
+          <label for="f-kitchen">Kuchnia (°C)</label>
+          <input type="text" id="f-kitchen" inputmode="decimal" placeholder="np. 20,5" required>
+        </div>
+        <div class="field">
+          <label for="f-outside">Zewnątrz (°C)</label>
+          <input type="text" id="f-outside" inputmode="decimal" placeholder="np. 7" required>
+        </div>
+
+        <div class="field wide">
+          <label for="f-furnace">Piec (°C lub off)</label>
+          <div class="inline">
+            <input type="text" id="f-furnace" inputmode="decimal" placeholder="np. 25" required>
+            <button type="button" class="chip" id="off-btn" aria-label="Ustaw piec na off">off</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="error" id="error" role="alert" hidden></p>
+
+      <div class="actions">
+        <button type="submit" class="primary" id="submit">Dodaj wpis</button>
+        <button type="button" id="cancel" hidden>Anuluj</button>
+        <button type="button" class="danger" id="delete" hidden>Usuń</button>
+      </div>
+    </form>
+
+    <section class="card" aria-labelledby="list-title">
+      <h2 id="list-title">Wpisy</h2>
+      <div class="table-wrap" id="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" class="left" title="Data">Data</th>
+              <th scope="col" title="Godzina">Godz.</th>
+              <th scope="col" title="Temperatura w kuchni">Kuchnia</th>
+              <th scope="col" title="Temperatura pieca">Piec</th>
+              <th scope="col" title="Temperatura na zewnątrz">Zewn.</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="empty" hidden>Brak wpisów. Dodaj pierwszy powyżej albo zaimportuj tabelę.</p>
+      <p class="hint" id="tap-hint" hidden>Dotknij wiersza, żeby go edytować lub usunąć.</p>
+    </section>
+
+    <section class="card" aria-labelledby="data-title">
+      <h2 id="data-title">Dane</h2>
+      <div class="tools">
+        <button type="button" id="copy">Kopiuj tabelę</button>
+        <button type="button" id="download">Pobierz CSV</button>
+        <button type="button" id="import">Importuj</button>
+        <button type="button" class="danger" id="clear">Wyczyść</button>
+      </div>
+      <p class="hint">
+        Dane są zapisane tylko w tej przeglądarce, na tym urządzeniu. „Kopiuj tabelę” wkleisz
+        prosto do Excela albo Arkuszy Google.
+      </p>
+    </section>
+  </main>
+
+  <dialog id="import-dialog">
+    <form method="dialog">
+      <h2>Importuj tabelę</h2>
+      <p class="hint">
+        Wklej wiersze skopiowane z Excela lub Arkuszy Google (kolumny jak w oryginalnej tabeli:
+        data, godz, kuchnia, piec, piec zmiana na, zewnątrz). Kolumna „piec zmiana na” jest
+        pomijana. Puste dni są ignorowane, a wiersze z brakującymi polami pomijane.
+      </p>
+      <textarea id="import-text" rows="8" spellcheck="false"
+                placeholder="20.11.2026&#9;10&#9;20,5&#9;off&#9;&#9;7"></textarea>
+      <div class="actions">
+        <button value="ok" class="primary">Importuj</button>
+        <button value="cancel" formnovalidate>Anuluj</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
