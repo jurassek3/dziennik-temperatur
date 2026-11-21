@@ -43,3 +43,9 @@ chwilę pokazywać starą wersję z cache.
 oryginalna tabela, z pustą kolumną „zmiana na”). „Importuj” przyjmuje taki sam tekst z powrotem
 i pomija kolumnę „zmiana na”. Wyczyszczenie danych
 przeglądarki kasuje też wpisy, więc od czasu do czasu warto skopiować tabelę.
+
+## Synchronizacja z arkuszem Google (opcjonalna)
+
+Karta „Synchronizacja” w aplikacji wysyła wpisy do arkusza Google i pobiera zmiany z innych
+urządzeń. Skrypt po stronie Google i instrukcja leżą w folderze `apps-script` obok tego folderu
+(`KONFIGURACJA.md`). **Nie wrzucaj `apps-script` na GitHuba**, bo jest tam Twój tajny klucz.

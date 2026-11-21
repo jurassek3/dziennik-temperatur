@@ -24,7 +24,10 @@
 
     <form id="form" class="card" autocomplete="off" novalidate>
       <h2 id="form-title">Nowy wpis</h2>
-      <p class="hint form-hint">Wszystkie pola są wymagane.</p>
+      <p class="hint form-hint">
+        Wszystkie pola są wymagane. Kuchnia i zewnątrz od −30 do 30 °C, piec od 25 do 40 °C
+        (albo off). Najwyżej jedno miejsce po przecinku (np. 20,5).
+      </p>
 
       <div class="grid">
         <div class="field">
@@ -32,23 +35,29 @@
           <input type="date" id="f-date" required>
         </div>
         <div class="field">
-          <label for="f-hour">Godzina (0–23)</label>
-          <input type="number" id="f-hour" min="0" max="23" step="1" inputmode="numeric" required>
+          <label for="f-hour">Godzina</label>
+          <input type="time" id="f-hour" step="3600" required>
         </div>
 
         <div class="field">
           <label for="f-kitchen">Kuchnia (°C)</label>
-          <input type="text" id="f-kitchen" inputmode="decimal" placeholder="np. 20,5" required>
+          <div class="inline">
+            <input type="text" id="f-kitchen" inputmode="decimal" placeholder="np. 20,5" required>
+            <button type="button" class="chip sign" data-target="f-kitchen" aria-label="Zmień znak temperatury w kuchni (plus lub minus)">±</button>
+          </div>
         </div>
         <div class="field">
           <label for="f-outside">Zewnątrz (°C)</label>
-          <input type="text" id="f-outside" inputmode="decimal" placeholder="np. 7" required>
+          <div class="inline">
+            <input type="text" id="f-outside" inputmode="decimal" placeholder="np. -3,5" required>
+            <button type="button" class="chip sign" data-target="f-outside" aria-label="Zmień znak temperatury na zewnątrz (plus lub minus)">±</button>
+          </div>
         </div>
 
         <div class="field wide">
-          <label for="f-furnace">Piec (°C lub off)</label>
+          <label for="f-furnace">Piec (25–40 °C lub off)</label>
           <div class="inline">
-            <input type="text" id="f-furnace" inputmode="decimal" placeholder="np. 25" required>
+            <input type="text" id="f-furnace" inputmode="decimal" placeholder="np. 30" required>
             <button type="button" class="chip" id="off-btn" aria-label="Ustaw piec na off">off</button>
           </div>
         </div>
@@ -83,6 +92,15 @@
       <p class="hint" id="tap-hint" hidden>Dotknij wiersza, żeby go edytować lub usunąć.</p>
     </section>
 
+    <section class="card" aria-labelledby="sync-title">
+      <h2 id="sync-title">Synchronizacja</h2>
+      <p class="sync-status" id="sync-status"></p>
+      <div class="tools">
+        <button type="button" id="sync-setup">Skonfiguruj</button>
+        <button type="button" id="sync-now" hidden>Synchronizuj teraz</button>
+      </div>
+    </section>
+
     <section class="card" aria-labelledby="data-title">
       <h2 id="data-title">Dane</h2>
       <div class="tools">
@@ -92,8 +110,8 @@
         <button type="button" class="danger" id="clear">Wyczyść</button>
       </div>
       <p class="hint">
-        Dane są zapisane tylko w tej przeglądarce, na tym urządzeniu. „Kopiuj tabelę” wkleisz
-        prosto do Excela albo Arkuszy Google.
+        Wpisy zapisują się w tej przeglądarce, a po włączeniu synchronizacji także w arkuszu Google.
+        „Kopiuj tabelę” wkleisz prosto do Excela albo Arkuszy Google.
       </p>
     </section>
   </main>
@@ -111,6 +129,34 @@
       <div class="actions">
         <button value="ok" class="primary">Importuj</button>
         <button value="cancel" formnovalidate>Anuluj</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="sync-dialog">
+    <form method="dialog" id="sync-form">
+      <h2>Synchronizacja z arkuszem Google</h2>
+      <p class="hint">
+        Wklej adres wdrożenia skryptu (kończy się na /exec) i klucz z początku kodu skryptu.
+        Instrukcja: plik KONFIGURACJA.md w folderze apps-script.
+      </p>
+      <div class="stack">
+        <div class="field">
+          <label for="sync-url">Adres skryptu</label>
+          <input type="url" id="sync-url" placeholder="https://script.google.com/macros/s/…/exec"
+                 autocomplete="off" autocapitalize="off" spellcheck="false" required>
+        </div>
+        <div class="field">
+          <label for="sync-key">Klucz</label>
+          <input type="text" id="sync-key" autocomplete="off" autocapitalize="off"
+                 spellcheck="false" required>
+        </div>
+      </div>
+      <p class="error" id="sync-error" role="alert" hidden></p>
+      <div class="actions">
+        <button value="ok" class="primary" id="sync-save">Zapisz i połącz</button>
+        <button value="cancel" formnovalidate>Anuluj</button>
+        <button type="button" class="danger" id="sync-off" hidden>Wyłącz</button>
       </div>
     </form>
   </dialog>

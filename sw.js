@@ -1,6 +1,6 @@
 // Service worker: cache plików aplikacji, żeby działała offline.
 // Po każdej zmianie plików podbij numer wersji, żeby telefon pobrał nowe.
-const CACHE = 'dziennik-temperatur-v2';
+const CACHE = 'dziennik-temperatur-v6';
 
 const FILES = [
   './',

@@ -131,6 +131,9 @@ td.none { color: var(--muted); }
 
 .tools { display: flex; flex-wrap: wrap; gap: 8px; }
 
+.stack { display: grid; gap: 12px; }
+.sync-status { margin: 0 0 12px; color: var(--muted); font-size: 0.9rem; }
+
 /* ---- import ---- */
 dialog {
   width: min(92vw, 520px);
